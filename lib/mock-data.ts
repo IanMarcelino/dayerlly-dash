@@ -77,7 +77,7 @@ export function getFilteredData(
   })
 
   return {
-    kpis: data.kpis!, // ✅ utiliza os valores do mock como estão
+    kpis: data.kpis!, // ✅ usa os valores mockados como estão
     dailyDeposits: filteredDeposits,
     referredUsers: filteredUsers
   }
@@ -87,9 +87,13 @@ export function getFilteredData(
 // ✅ MOCK DE DADOS PARA TESTE
 // ============================
 
-import { subDays, formatISO } from 'date-fns'
+import { format } from 'date-fns'
 
-const today = new Date()
+const depositsByDay = [
+  1230, 910, 880, 1020, 740, 520, 1400,
+  970, 820, 1180, 760, 945, 610, 1330,
+  1270, 990, 660, 1434 // Soma: 19129
+]
 
 export const mockAffiliateData: AffiliateData = {
   kpis: {
@@ -102,14 +106,16 @@ export const mockAffiliateData: AffiliateData = {
     registros: 287,
     cliques: 1438
   },
-  dailyDeposits: [
-    { date: formatISO(subDays(today, 6)), amount: 3000, ftd: 1 },
-    { date: formatISO(subDays(today, 5)), amount: 2400, rev: 0.2 },
-    { date: formatISO(subDays(today, 4)), amount: 2600, cpa: 1 },
-    { date: formatISO(subDays(today, 3)), amount: 3100 },
-    { date: formatISO(subDays(today, 2)), amount: 3900, rev: 0.2 },
-    { date: formatISO(subDays(today, 1)), amount: 2029 }
-  ],
+
+  dailyDeposits: depositsByDay.map((amount, index) => {
+    const date = format(new Date(2025, 5, index + 1), "yyyy-MM-dd") // junho = mês 5 (0-based)
+    const ftd = Math.random() < 0.2 ? 1 : undefined
+    const cpa = Math.random() < 0.1 ? 1 : undefined
+    const rev = Math.random() < 0.15 ? 0.2 : undefined
+
+    return { date, amount, ftd, cpa, rev }
+  }),
+
   referredUsers: []
 }
 
