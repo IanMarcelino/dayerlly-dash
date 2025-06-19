@@ -38,7 +38,7 @@ export interface AffiliateData {
 }
 
 // ============================
-// 📌 FUNÇÃO DE FILTRAGEM (usa KPIs fixos do mock)
+// 📌 FUNÇÃO DE FILTRAGEM
 // ============================
 
 export function getFilteredData(
@@ -77,7 +77,7 @@ export function getFilteredData(
   })
 
   return {
-    kpis: data.kpis!, // ✅ usa os valores mockados como estão
+    kpis: data.kpis!,
     dailyDeposits: filteredDeposits,
     referredUsers: filteredUsers
   }
@@ -89,32 +89,25 @@ export function getFilteredData(
 
 import { format } from 'date-fns'
 
-const depositsByDay = [
-  1230, 910, 880, 1020, 740, 520, 1400,
-  970, 820, 1180, 760, 945, 610, 1330,
-  1270, 990, 660, 1434 // Soma: 19129
-]
-
 export const mockAffiliateData: AffiliateData = {
   kpis: {
-    totalDeposits: 19129,
-    cpas: 0,
-    ftds: 164,
+    totalDeposits: 50,
+    cpas: 1,
+    ftds: 2,
     revShare: 0,
-    estimatedCommission: 0,
+    estimatedCommission: 30,
     depositChange: 0,
-    registros: 287,
-    cliques: 1438
+    registros: 4,
+    cliques: 0
   },
 
-  dailyDeposits: depositsByDay.map((amount, index) => {
-    const date = format(new Date(2025, 5, index + 1), "yyyy-MM-dd") // junho = mês 5 (0-based)
-    const ftd = Math.random() < 0.2 ? 1 : undefined
-    const cpa = Math.random() < 0.1 ? 1 : undefined
-    const rev = Math.random() < 0.15 ? 0.2 : undefined
-
-    return { date, amount, ftd, cpa, rev }
-  }),
+  dailyDeposits: [
+    {
+      date: format(new Date(2025, 5, 18), "yyyy-MM-dd"), // 18 de junho (junho = mês 5)
+      amount: 29.12,
+      rev: 6.98 / 29.12 // Isso resultará em exatamente 6.98 no gráfico
+    }
+  ],
 
   referredUsers: []
 }
